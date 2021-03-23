@@ -53,3 +53,18 @@ async fn raw<F: Fn(Vec<u64>)>(returnjs: F) {
         prev_keys = keys;
     }
 }
+
+#[node_bindgen]
+fn capturecombo() -> Vec<u64> {
+    let device_state = DeviceState::new();
+    let mut prev_keys = vec![];
+    loop {
+        let keys = device_state.get_keys();
+        if keys != prev_keys && keys.len() == 2 {
+            let clonekeys: Vec<u64> = keys.clone().into_par_iter().map(|x| x as u64).collect();
+
+            return clonekeys
+        }
+        prev_keys = keys;
+    }
+}
