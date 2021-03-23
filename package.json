@@ -1,0 +1,9 @@
+{
+  "name": "globkey",
+  "version": "1.0.0",
+  "description": "A nodejs module for reading global keyevents, written in Rust",
+  "main": "./dist",
+  "repository": "https://github.com/StratusFearMe21/globkey.git",
+  "author": "Isaac Mills <rooster0055@protonmail.com>",
+  "license": "MIT"
+}
