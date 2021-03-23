@@ -7,7 +7,7 @@ I'm not very good at nodejs or javascript in general, but I do know rust. So I u
 You use the library by defining a `.on` function, this creates a callback that can be used to do push to talk, here's an example
 
 ```javascript
-let hook = require('electron_globkey');
+let hook = require('globkey');
 
 hook.on(function(action, key){
     if (action == "keydown" && key == 29) {
