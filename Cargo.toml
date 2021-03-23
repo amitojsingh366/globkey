@@ -1,0 +1,18 @@
+[package]
+name = "electron_globkey"
+version = "0.1.0"
+authors = ["Isaac Mills <rooster0055@protonmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+node-bindgen = { version = "*" }
+keyboard_query = "*"
+lazy_static = "*"
+
+[build-dependencies]
+node-bindgen = { version = "*", features = ["build"] }
