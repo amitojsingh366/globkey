@@ -8,7 +8,7 @@ struct Changed {
 }
 
 #[node_bindgen]
-async fn on<F: Fn(String, u64)>(returnjs: F) {
+async fn on<F: Fn(String, i32)>(returnjs: F) {
     let device_state = DeviceState::new();
     let mut prev_keys = vec![];
     loop {
@@ -32,7 +32,7 @@ async fn on<F: Fn(String, u64)>(returnjs: F) {
                 }
             });
             changed.into_iter().for_each(|i| {
-                returnjs(i.op, i.key as u64);
+                returnjs(i.op, i.key as i32);
             });
         }
         prev_keys = keys;
@@ -40,13 +40,13 @@ async fn on<F: Fn(String, u64)>(returnjs: F) {
 }
 
 #[node_bindgen]
-async fn raw<F: Fn(Vec<u64>)>(returnjs: F) {
+async fn raw<F: Fn(Vec<i32>)>(returnjs: F) {
     let device_state = DeviceState::new();
     let mut prev_keys = vec![];
     loop {
         let keys = device_state.get_keys();
         if keys != prev_keys {
-            let clonekeys: Vec<u64> = keys.clone().into_par_iter().map(|x| x as u64).collect();
+            let clonekeys: Vec<i32> = keys.clone().into_par_iter().map(|x| x as i32).collect();
 
             returnjs(clonekeys);
         }
@@ -55,13 +55,13 @@ async fn raw<F: Fn(Vec<u64>)>(returnjs: F) {
 }
 
 #[node_bindgen]
-fn capturecombo() -> Vec<u64> {
+fn capturecombo() -> Vec<i32> {
     let device_state = DeviceState::new();
     let mut prev_keys = vec![];
     loop {
         let keys = device_state.get_keys();
         if keys != prev_keys && keys.len() == 2 {
-            let clonekeys: Vec<u64> = keys.clone().into_par_iter().map(|x| x as u64).collect();
+            let clonekeys: Vec<i32> = keys.clone().into_par_iter().map(|x| x as i32).collect();
 
             return clonekeys
         }
