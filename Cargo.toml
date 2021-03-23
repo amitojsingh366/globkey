@@ -12,6 +12,7 @@ crate-type = ["cdylib"]
 [dependencies]
 node-bindgen = { version = "*" }
 keyboard_query = "*"
+rayon = "*"
 lazy_static = "*"
 
 [build-dependencies]
