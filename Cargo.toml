@@ -14,7 +14,6 @@ crate-type = ["cdylib"]
 node-bindgen = { version = "*" }
 device_query = "*"
 rayon = "*"
-lazy_static = "*"
 
 [build-dependencies]
 node-bindgen = { version = "*", features = ["build"] }
