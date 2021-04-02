@@ -13,7 +13,6 @@ crate-type = ["cdylib"]
 [dependencies]
 node-bindgen = { version = "*" }
 device_query = "*"
-rayon = "*"
 
 [build-dependencies]
 node-bindgen = { version = "*", features = ["build"] }
