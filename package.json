@@ -1,5 +1,4 @@
 {
-<<<<<<< HEAD
     "name": "globkey",
     "version": "1.0.13",
     "description": "A nodejs module for reading global keyevents, written in Rust",
@@ -7,24 +6,5 @@
     "types": "index.d.ts",
     "repository": "https://github.com/StratusFearMe21/globkey.git",
     "author": "Isaac Mills <rooster0055@protonmail.com>",
-    "license": "MIT",
-    "devDependencies": {
-        "electron-build-env": "^0.2.0",
-        "del-cli": "^3.0.1",
-        "electron": "^11.3.0"
-    },
-    "scripts": {
-        "build": "npx electron-build-env nj-cli build --release && del-cli target src node_modules"
-    }
+    "license": "MIT"
 }
-=======
-  "name": "globkey",
-  "version": "1.0.13",
-  "description": "A nodejs module for reading global keyevents, written in Rust",
-  "main": "./dist",
-  "types": "index.d.ts",
-  "repository": "https://github.com/StratusFearMe21/globkey.git",
-  "author": "Isaac Mills <rooster0055@protonmail.com>",
-  "license": "MIT"
-}
->>>>>>> 19709f8f39983adfc1b1a7801fed822252998541
