@@ -16,6 +16,7 @@ async fn raw<F: Fn(Vec<String>)>(returnjs: F) -> bool {
     loop {
         let keys = device_state.get_keys();
         if *SHOULDSTOP.read().unwrap() {
+            println!("breaking loop");
             return true;
         } else if keys != prev_keys {
             let returnkeys: Vec<String> = keys
