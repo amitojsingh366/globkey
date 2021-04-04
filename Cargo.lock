@@ -302,6 +302,7 @@ name = "electron_globkey"
 version = "0.1.0"
 dependencies = [
  "device_query",
+ "lazy_static",
  "node-bindgen",
 ]
 
