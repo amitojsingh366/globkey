@@ -1,10 +1,10 @@
 {
-    "name": "globkey",
-    "version": "1.0.13",
-    "description": "A nodejs module for reading global keyevents, written in Rust",
-    "main": "./dist",
-    "types": "index.d.ts",
-    "repository": "https://github.com/StratusFearMe21/globkey.git",
-    "author": "Isaac Mills <rooster0055@protonmail.com>",
-    "license": "MIT"
+  "name": "globkey",
+  "version": "1.0.22",
+  "description": "A nodejs module for reading global keyevents, written in Rust",
+  "main": "./dist",
+  "types": "index.d.ts",
+  "repository": "https://github.com/StratusFearMe21/globkey.git",
+  "author": "Isaac Mills <rooster0055@protonmail.com>",
+  "license": "MIT"
 }

@@ -11,8 +11,10 @@ build = "src/build.rs"
 crate-type = ["cdylib"]
 
 [dependencies]
-node-bindgen = { version = "*" }
+node-bindgen = { version = "4.0" }
 device_query = "*"
+once_cell = "*"
+parking_lot = "*"
 
 [build-dependencies]
-node-bindgen = { version = "*", features = ["build"] }
+node-bindgen = { version = "4.0", features = ["build"] }
