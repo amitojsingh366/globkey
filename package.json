@@ -6,12 +6,5 @@
   "types": "index.d.ts",
   "repository": "https://github.com/StratusFearMe21/globkey.git",
   "author": "Isaac Mills <rooster0055@protonmail.com>",
-  "license": "MIT",
-  "scripts": {
-    "build": "nj-cli build --release",
-    "delete:artifacts": "del-cli target node_modules"
-  },
-  "devDependencies": {
-    "del-cli": "^3.0.1"
-  }
+  "license": "MIT"
 }
