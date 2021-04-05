@@ -1,5 +1,5 @@
 declare module "globkey" {
-    export function raw(callback: (keypair: string[]) => void): Promise<boolean>;
+    export function start(): void;
     export function unload(): void;
     export function getKeys(): string[];
 }
