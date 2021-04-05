@@ -13,7 +13,8 @@ crate-type = ["cdylib"]
 [dependencies]
 node-bindgen = { version = "4.0" }
 device_query = "*"
-lazy_static = "*"
+once_cell = "*"
+parking_lot = "*"
 
 [build-dependencies]
 node-bindgen = { version = "4.0", features = ["build"] }
