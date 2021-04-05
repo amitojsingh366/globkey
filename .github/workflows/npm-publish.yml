@@ -16,10 +16,6 @@ jobs:
         node-version: 14
     - name: Install deps
       run: yarn
-    - name: Install rust
-      uses: hecrj/setup-rust-action@v1
-      with:
-        rust-version: stable
     - name: Publish if version has been updated
       uses: pascalgn/npm-publish-action@1.3.7
       with: # All of theses inputs are optional
