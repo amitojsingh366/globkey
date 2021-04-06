@@ -8,8 +8,8 @@ declare module "globkey" {
      */
     export function unload(): void;
     /**
-     * @returns an array of the currently pressed keys.
+     * @returns an array of the currently pressed keys, or a boolean of false if it failed.
      * @remarks this method will only fucntion properly if the `start()` function has already been called
      */
-    export function getKeys(): string[];
+    export function getKeys(): string[] | boolean;
 }

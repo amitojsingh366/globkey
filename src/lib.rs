@@ -36,11 +36,11 @@ fn start() {
 }
 
 #[node_bindgen]
-fn get_keys() -> Vec<String> {
+fn get_keys() -> Result<Vec<String>, bool> {
     let reciever = DEVICEMPSC.1.lock();
-    match reciever.recv() {
-        Ok(s) => s,
-        Err(e) => vec![e.to_string()],
+    match reciever.try_recv() {
+        Ok(s) => Ok(s),
+        Err(_) => Err(false),
     }
 }
 
