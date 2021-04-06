@@ -20,15 +20,17 @@ fn start() {
     std::thread::spawn(move || loop {
         let sender = DEVICEMPSC.0.lock();
         let device_state = DeviceState::new();
+        let mut prev_keys = vec![];
         loop {
             let keys = device_state.get_keys();
             if *SHOULDSTOP.read() {
                 return true;
-            } else {
+            } else if keys != prev_keys {
                 let returnkeys: Vec<String> =
                     keys.clone().into_iter().map(|x| format!("{}", x)).collect();
                 sender.send(returnkeys).unwrap();
             }
+            prev_keys = keys;
         }
     });
 }
