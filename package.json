@@ -1,6 +1,6 @@
 {
   "name": "globkey",
-  "version": "1.0.23",
+  "version": "1.0.26",
   "description": "A nodejs module for reading global keyevents, written in Rust",
   "main": "./dist",
   "types": "index.d.ts",
