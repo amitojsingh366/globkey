@@ -15,32 +15,40 @@ static DEVICEMPSC: sync::Lazy<(
 
 static SHOULDSTOP: sync::Lazy<RwLock<bool>> = sync::Lazy::new(|| RwLock::new(false));
 
+static DEVICETHREAD: sync::OnceCell<Mutex<std::thread::JoinHandle<bool>>> = sync::OnceCell::new();
+
 #[node_bindgen]
 fn start() {
-    std::thread::spawn(move || loop {
-        let sender = DEVICEMPSC.0.lock();
-        let device_state = DeviceState::new();
-        let mut prev_keys = vec![];
-        loop {
-            let keys = device_state.get_keys();
-            if *SHOULDSTOP.read() {
-                return true;
-            } else if keys != prev_keys {
-                let returnkeys: Vec<String> =
-                    keys.clone().into_iter().map(|x| format!("{}", x)).collect();
-                sender.send(returnkeys).unwrap();
+    *SHOULDSTOP.write() = false;
+    DEVICETHREAD
+        .set(Mutex::new(std::thread::spawn(move || loop {
+            let sender = DEVICEMPSC.0.lock();
+            let device_state = DeviceState::new();
+            let mut prev_keys = vec![];
+            loop {
+                let keys = device_state.get_keys();
+                if *SHOULDSTOP.read() {
+                    return true;
+                } else if keys != prev_keys {
+                    let returnkeys: Vec<String> =
+                        keys.clone().into_iter().map(|x| format!("{}", x)).collect();
+                    sender.send(returnkeys).unwrap();
+                }
+                prev_keys = keys;
             }
-            prev_keys = keys;
-        }
-    });
+        })))
+        .unwrap();
 }
 
 #[node_bindgen]
 fn get_keys() -> Result<Vec<String>, bool> {
     let reciever = DEVICEMPSC.1.lock();
-    match reciever.try_recv() {
-        Ok(s) => Ok(s),
-        Err(_) => Err(false),
+    match (DEVICETHREAD.get(), *SHOULDSTOP.read()) {
+        (None, _) | (_, true) => Err(false),
+        _ => match reciever.recv() {
+            Ok(s) => Ok(s),
+            Err(_) => Err(false),
+        },
     }
 }
 
