@@ -44,19 +44,34 @@ fn start() {
 #[node_bindgen]
 fn get_keys() -> Result<Vec<String>, bool> {
     let reciever = DEVICEMPSC.1.lock();
-    match *SHOULDSTOP.read() {
-        true => Err(false),
-        _ => match DEVICETHREAD.get() {
-            Some(_) => match reciever.recv() {
+    match DEVICETHREAD.get() {
+        Some(_) => match *SHOULDSTOP.read() {
+            false => match reciever.recv() {
                 Ok(s) => Ok(s),
                 Err(_) => Err(false),
             },
-            None => Err(false),
+            true => Err(false),
         },
+        None => Err(false),
     }
 }
 
 #[node_bindgen]
-fn unload() {
+fn unload() -> Result<(), &'static str> {
     *SHOULDSTOP.write() = true;
+    match DEVICETHREAD.get().unwrap().lock().take().unwrap().join() {
+        Ok(true) => Ok(()),
+        _ => Err("Failed to kill worker thread"),
+    }
 }
+
+// mod tests {
+//     use super::*;
+
+//     fn it_works() {
+//         start();
+//         loop {
+//             println!("{:?}", get_keys());
+//         }
+//     }
+// }
