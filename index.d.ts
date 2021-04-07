@@ -17,4 +17,8 @@ declare module "globkey" {
      * @remarks this method will only return `true` if `start()` has been called
      */
     export function isRunning(): boolean;
+    /**
+     * Unloads and stops the globkey library as well as kills the nodejs process
+     */
+    export function stop(): void;
 }

@@ -15,74 +15,50 @@ static DEVICEMPSC: sync::Lazy<(
 
 static SHOULDSTOP: sync::Lazy<RwLock<bool>> = sync::Lazy::new(|| RwLock::new(false));
 
-static DEVICETHREAD: sync::OnceCell<Mutex<Option<std::thread::JoinHandle<bool>>>> =
-    sync::OnceCell::new();
-
 #[node_bindgen]
 fn start() {
-    *SHOULDSTOP.write() = false;
-    DEVICETHREAD
-        .set(Mutex::new(Some(std::thread::spawn(move || loop {
-            let sender = DEVICEMPSC.0.lock();
-            let device_state = DeviceState::new();
-            let mut prev_keys = vec![];
-            loop {
-                let keys = device_state.get_keys();
-                if *SHOULDSTOP.read() {
-                    return true;
-                } else if keys != prev_keys {
-                    let returnkeys: Vec<String> =
-                        keys.clone().into_iter().map(|x| format!("{}", x)).collect();
-                    sender.send(returnkeys).unwrap();
-                }
-                prev_keys = keys;
+    std::thread::spawn(move || loop {
+        let sender = DEVICEMPSC.0.lock();
+        let device_state = DeviceState::new();
+        let mut prev_keys = vec![];
+        loop {
+            let keys = device_state.get_keys();
+            if *SHOULDSTOP.read() {
+                return true;
+            } else if keys != prev_keys {
+                let returnkeys: Vec<String> =
+                    keys.clone().into_iter().map(|x| format!("{}", x)).collect();
+                sender.send(returnkeys).unwrap();
             }
-        }))))
-        .unwrap();
+            prev_keys = keys;
+        }
+    });
 }
 
 #[node_bindgen]
-fn get_keys() -> Result<Vec<String>, bool> {
+fn get_keys() -> Vec<String> {
     let reciever = DEVICEMPSC.1.lock();
-    match DEVICETHREAD.get() {
-        Some(_) => match *SHOULDSTOP.read() {
-            false => match reciever.recv() {
-                Ok(s) => Ok(s),
-                Err(_) => Err(false),
-            },
-            true => Err(false),
-        },
-        None => Err(false),
+    match reciever.recv() {
+        Ok(s) => s,
+        Err(e) => vec![e.to_string()],
     }
 }
 
 #[node_bindgen]
 fn is_running() -> Result<bool, bool> {
-    match DEVICETHREAD.get() {
-        Some(_) => match *SHOULDSTOP.read() {
-            false => Ok(true),
-            true => Ok(false),
-        },
-        None => Err(false),
+    match *SHOULDSTOP.read() {
+        false => Ok(true),
+        true => Ok(false),
     }
 }
 
 #[node_bindgen]
-fn unload() -> Result<(), &'static str> {
+fn unload() {
     *SHOULDSTOP.write() = true;
-    match DEVICETHREAD.get().unwrap().lock().take().unwrap().join() {
-        Ok(true) => Ok(()),
-        _ => Err("Failed to kill worker thread"),
-    }
 }
 
-// mod tests {
-//     use super::*;
-
-//     fn it_works() {
-//         start();
-//         loop {
-//             println!("{:?}", get_keys());
-//         }
-//     }
-// }
+#[node_bindgen]
+fn stop() {
+    *SHOULDSTOP.write() = true;
+    std::process::exit(0);
+}
