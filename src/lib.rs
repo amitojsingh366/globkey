@@ -57,6 +57,17 @@ fn get_keys() -> Result<Vec<String>, bool> {
 }
 
 #[node_bindgen]
+fn is_running() -> Result<bool, bool> {
+    match DEVICETHREAD.get() {
+        Some(_) => match *SHOULDSTOP.read() {
+            false => Ok(true),
+            true => Ok(false),
+        },
+        None => Err(false),
+    }
+}
+
+#[node_bindgen]
 fn unload() -> Result<(), &'static str> {
     *SHOULDSTOP.write() = true;
     match DEVICETHREAD.get().unwrap().lock().take().unwrap().join() {

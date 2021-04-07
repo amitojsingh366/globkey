@@ -12,4 +12,9 @@ declare module "globkey" {
      * @remarks this method will only fucntion properly if the `start()` function has already been called
      */
     export function getKeys(): string[] | boolean;
+    /**
+     * @returns a boolean value based on if globkey is runnig or not.
+     * @remarks this method will only return `true` if `start()` has been called
+     */
+    export function isRunning(): boolean;
 }
